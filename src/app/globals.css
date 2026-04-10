@@ -1,27 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "react-datepicker/dist/react-datepicker.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  background: #F4F2DE;
+  color: #2C3E52;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+h1, h2, h3, h4 {
+  font-family: var(--font-fraunces), serif;
+}
+
+/* react-datepicker overrides */
+.react-datepicker {
+  font-family: var(--font-inter), sans-serif;
+  border: 1px solid #7C9D96;
+  border-radius: 8px;
+  background: #F4F2DE;
+}
+.react-datepicker__header {
+  background: #5B7C99;
+  border-bottom: none;
+}
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: #F4F2DE;
+}
+.react-datepicker__day--selected,
+.react-datepicker__day--in-range,
+.react-datepicker__day--in-selecting-range {
+  background: #E9B384 !important;
+  color: #2C3E52 !important;
+}
+.react-datepicker__day--disabled {
+  color: #c0beac !important;
+  text-decoration: line-through;
 }
