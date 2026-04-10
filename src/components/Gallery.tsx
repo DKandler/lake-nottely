@@ -24,6 +24,18 @@ export default function Gallery({ images }: { images: string[] }) {
     return () => window.removeEventListener("keydown", handler);
   }, [prev, next]);
 
+  const isPlaceholder = images.length === 1 && images[0] === "placeholder";
+
+  if (isPlaceholder) {
+    return (
+      <div className="rounded-xl overflow-hidden h-[300px] sm:h-[420px] bg-sage flex items-center justify-center">
+        <span className="font-display text-2xl sm:text-3xl text-cream/90">
+          Photos coming soon
+        </span>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Airbnb-style grid: 1 large + 4 small */}

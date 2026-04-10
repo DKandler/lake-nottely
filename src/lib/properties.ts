@@ -1,3 +1,7 @@
+const CLOUD = "dc6g4e3kf";
+const cldUrl = (publicId: string) =>
+  `https://res.cloudinary.com/${CLOUD}/image/upload/w_1600,c_fill,q_auto,f_auto/${publicId}.jpg`;
+
 export type Property = {
   slug: string;
   name: string;
@@ -30,14 +34,8 @@ export const properties: Property[] = [
     sleeps: 6,
     nightlyRate: 245,
     cleaningFee: 125,
-    heroImage:
-      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=1600&q=80",
-    gallery: [
-      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=1600&q=80",
-      "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1600&q=80",
-      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1600&q=80",
-      "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1600&q=80",
-    ],
+    heroImage: "placeholder",
+    gallery: ["placeholder"],
     amenities: [
       "Private dock",
       "Screened porch",
@@ -73,19 +71,25 @@ export const properties: Property[] = [
     sleeps: 12,
     nightlyRate: 575,
     cleaningFee: 300,
-    heroImage: "/photos/chanterelle-shores/exterior.jpg",
+    heroImage: cldUrl("photo-02"),
     gallery: [
-      "/photos/chanterelle-shores/exterior.jpg",
-      "/photos/chanterelle-shores/living-fireplace.jpg",
-      "/photos/chanterelle-shores/kitchen-wide.jpg",
-      "/photos/chanterelle-shores/covered-deck-fireplace.jpg",
-      "/photos/chanterelle-shores/bedroom-king.jpg",
-      "/photos/chanterelle-shores/deck-dining.jpg",
-      "/photos/chanterelle-shores/basement-lounge.jpg",
-      "/photos/chanterelle-shores/outdoor-fireplace.jpg",
-      "/photos/chanterelle-shores/front-door.jpg",
-      "/photos/chanterelle-shores/kitchen-open.jpg",
-      "/photos/chanterelle-shores/shower.jpg",
+      cldUrl("photo-02"), cldUrl("photo-03"), cldUrl("photo-05"),
+      cldUrl("photo-06"), cldUrl("photo-07"), cldUrl("photo-08"),
+      cldUrl("photo-09"), cldUrl("photo-10"), cldUrl("photo-13"),
+      cldUrl("photo-14"), cldUrl("photo-15"), cldUrl("photo-16"),
+      cldUrl("photo-17"), cldUrl("photo-18"), cldUrl("photo-19"),
+      cldUrl("photo-20"), cldUrl("photo-21"), cldUrl("photo-22"),
+      cldUrl("photo-23"), cldUrl("photo-24"), cldUrl("photo-25"),
+      cldUrl("photo-26"), cldUrl("photo-27"), cldUrl("photo-28"),
+      cldUrl("photo-29"), cldUrl("photo-30"), cldUrl("photo-31"),
+      cldUrl("photo-32"), cldUrl("photo-33"), cldUrl("photo-34"),
+      cldUrl("photo-35"), cldUrl("photo-36"), cldUrl("photo-37"),
+      cldUrl("photo-38"), cldUrl("photo-39"), cldUrl("photo-40"),
+      cldUrl("photo-41"), cldUrl("photo-42"), cldUrl("photo-43"),
+      cldUrl("photo-44"), cldUrl("photo-45"), cldUrl("photo-46"),
+      cldUrl("photo-47"), cldUrl("photo-48"), cldUrl("photo-49"),
+      cldUrl("photo-52"), cldUrl("photo-63"), cldUrl("photo-64"),
+      cldUrl("photo-72"), cldUrl("photo-73"), cldUrl("photo-74"),
     ],
     amenities: [
       "100+ ft private waterfront",

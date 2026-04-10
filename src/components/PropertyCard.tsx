@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Property } from "@/lib/properties";
 
 export default function PropertyCard({ property }: { property: Property }) {
+  const isPlaceholder = property.heroImage === "placeholder";
   const photos = property.gallery.slice(0, 5);
 
   return (
@@ -9,27 +10,37 @@ export default function PropertyCard({ property }: { property: Property }) {
       {/* Photo grid: 1 large left + up to 2 small right */}
       <Link
         href={`/properties/${property.slug}`}
-        className="grid grid-cols-3 grid-rows-2 gap-0.5 h-64 relative group"
+        className="h-64 relative group"
       >
-        <div
-          className="col-span-2 row-span-2 bg-cover bg-center"
-          style={{ backgroundImage: `url(${photos[0]})` }}
-        />
-        {photos[1] && (
-          <div
-            className="bg-cover bg-center"
-            style={{ backgroundImage: `url(${photos[1]})` }}
-          />
-        )}
-        {photos[2] && (
-          <div
-            className="bg-cover bg-center relative"
-            style={{ backgroundImage: `url(${photos[2]})` }}
-          >
-            {property.gallery.length > 3 && (
-              <span className="absolute bottom-2 right-2 bg-cream/90 text-deep text-xs font-medium px-2 py-1 rounded border border-deep/15">
-                +{property.gallery.length - 3} more
-              </span>
+        {isPlaceholder ? (
+          <div className="w-full h-full bg-sage flex items-center justify-center">
+            <span className="font-display text-xl text-cream/90">
+              Photos coming soon
+            </span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 grid-rows-2 gap-0.5 h-full">
+            <div
+              className="col-span-2 row-span-2 bg-cover bg-center"
+              style={{ backgroundImage: `url(${photos[0]})` }}
+            />
+            {photos[1] && (
+              <div
+                className="bg-cover bg-center"
+                style={{ backgroundImage: `url(${photos[1]})` }}
+              />
+            )}
+            {photos[2] && (
+              <div
+                className="bg-cover bg-center relative"
+                style={{ backgroundImage: `url(${photos[2]})` }}
+              >
+                {property.gallery.length > 3 && (
+                  <span className="absolute bottom-2 right-2 bg-cream/90 text-deep text-xs font-medium px-2 py-1 rounded border border-deep/15">
+                    +{property.gallery.length - 3} more
+                  </span>
+                )}
+              </div>
             )}
           </div>
         )}
