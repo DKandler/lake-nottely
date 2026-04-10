@@ -2,12 +2,40 @@ import Link from "next/link";
 import type { Property } from "@/lib/properties";
 
 export default function PropertyCard({ property }: { property: Property }) {
+  const photos = property.gallery.slice(0, 5);
+
   return (
     <div className="bg-cream border border-sage/30 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition">
-      <div
-        className="h-64 bg-cover bg-center"
-        style={{ backgroundImage: `url(${property.heroImage})` }}
-      />
+      {/* Photo grid: 1 large left + up to 2 small right */}
+      <Link
+        href={`/properties/${property.slug}`}
+        className="grid grid-cols-3 grid-rows-2 gap-0.5 h-64 relative group"
+      >
+        <div
+          className="col-span-2 row-span-2 bg-cover bg-center"
+          style={{ backgroundImage: `url(${photos[0]})` }}
+        />
+        {photos[1] && (
+          <div
+            className="bg-cover bg-center"
+            style={{ backgroundImage: `url(${photos[1]})` }}
+          />
+        )}
+        {photos[2] && (
+          <div
+            className="bg-cover bg-center relative"
+            style={{ backgroundImage: `url(${photos[2]})` }}
+          >
+            {property.gallery.length > 3 && (
+              <span className="absolute bottom-2 right-2 bg-cream/90 text-deep text-xs font-medium px-2 py-1 rounded border border-deep/15">
+                +{property.gallery.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition" />
+      </Link>
+
       <div className="p-6 flex flex-col flex-1">
         <h3 className="font-display text-2xl text-deep">{property.name}</h3>
         <div className="mt-1 text-sm text-deep/70">

@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 import emailjs from "@emailjs/browser";
 import type { Property } from "@/lib/properties";
 
-const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "";
-const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
-const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "";
+const EMAILJS_SERVICE = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "";
+const EMAILJS_TEMPLATE = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
+const EMAILJS_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "";
 
 export default function BookingForm({
   property,
@@ -38,27 +39,50 @@ export default function BookingForm({
     setSubmitting(true);
 
     try {
-      if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
-        await emailjs.send(
-          SERVICE_ID,
-          TEMPLATE_ID,
-          {
-            property_name: property.name,
-            property_slug: property.slug,
-            guest_name: form.name,
-            guest_email: form.email,
-            guest_phone: form.phone,
-            check_in: form.start,
-            check_out: form.end,
-            message: form.message,
-          },
-          { publicKey: PUBLIC_KEY }
-        );
-      } else {
-        // EmailJS not configured — log for dev. Replace with real creds in .env.local.
-        console.warn("EmailJS env vars missing; booking request not sent.", form);
-        await new Promise((r) => setTimeout(r, 400));
+      // Calculate pricing
+      const start = new Date(form.start);
+      const end = new Date(form.end);
+      const nights = Math.max(1, Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+      const totalPrice = nights * property.nightlyRate + property.cleaningFee;
+
+      const { error: dbError } = await supabase.from("bookings").insert({
+        property_slug: property.slug,
+        guest_name: form.name,
+        guest_email: form.email,
+        guest_phone: form.phone,
+        check_in: form.start,
+        check_out: form.end,
+        nightly_rate: property.nightlyRate,
+        cleaning_fee: property.cleaningFee,
+        total_price: totalPrice,
+        message: form.message || null,
+        status: "pending",
+      });
+
+      if (dbError) throw dbError;
+
+      // Send email notification to owner (non-blocking — don't fail the booking if email fails)
+      if (EMAILJS_SERVICE && EMAILJS_TEMPLATE && EMAILJS_KEY) {
+        emailjs
+          .send(
+            EMAILJS_SERVICE,
+            EMAILJS_TEMPLATE,
+            {
+              property_name: property.name,
+              guest_name: form.name,
+              guest_email: form.email,
+              guest_phone: form.phone,
+              check_in: form.start,
+              check_out: form.end,
+              nights: String(nights),
+              total_price: String(totalPrice),
+              message: form.message || "No message",
+            },
+            { publicKey: EMAILJS_KEY }
+          )
+          .catch((err) => console.warn("Email notification failed:", err));
       }
+
       setSubmitted(true);
     } catch (err) {
       console.error(err);
