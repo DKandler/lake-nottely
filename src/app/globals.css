@@ -1,27 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "react-datepicker/dist/react-datepicker.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Brand colors defined in tailwind.config.ts:
+   ridge #5B7C99, peach #E9B384, sage #7C9D96, deep #2C3E52, cream #F4F2DE */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  @apply bg-cream text-deep;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+h1, h2, h3, h4 {
+  font-family: var(--font-fraunces), serif;
+}
+
+/* react-datepicker overrides — uses brand color vars where possible */
+.react-datepicker {
+  font-family: var(--font-inter), sans-serif;
+  @apply border border-sage rounded-lg bg-cream;
+}
+.react-datepicker__header {
+  @apply bg-ridge border-b-0;
+}
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  @apply text-cream;
+}
+.react-datepicker__day--selected,
+.react-datepicker__day--in-range,
+.react-datepicker__day--in-selecting-range {
+  background: theme('colors.peach') !important;
+  color: theme('colors.deep') !important;
+}
+.react-datepicker__day--disabled {
+  color: #c0beac !important;
+  text-decoration: line-through;
 }
