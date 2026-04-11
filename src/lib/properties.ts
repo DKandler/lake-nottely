@@ -1,6 +1,7 @@
 const CLOUD = "dc6g4e3kf";
+const FOLDER = "lake-nottely-stays/chanterelle-shores";
 const cldUrl = (publicId: string) =>
-  `https://res.cloudinary.com/${CLOUD}/image/upload/w_1600,c_fill,q_auto,f_auto/${publicId}.jpg`;
+  `https://res.cloudinary.com/${CLOUD}/image/upload/w_1600,c_fill,q_auto,f_auto/${FOLDER}/${publicId}.jpg`;
 
 export type Property = {
   slug: string;
