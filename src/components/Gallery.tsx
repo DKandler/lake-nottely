@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { cldFull, cldThumb } from "@/lib/properties";
 
 export default function Gallery({ images }: { images: string[] }) {
   const [active, setActive] = useState(0);
@@ -56,7 +57,7 @@ export default function Gallery({ images }: { images: string[] }) {
             key={src}
             onClick={() => { setActive(i + 1); setLightbox(true); }}
             className="hidden sm:block bg-cover bg-center relative group"
-            style={{ backgroundImage: `url(${src})` }}
+            style={{ backgroundImage: `url(${cldThumb(src)})` }}
             aria-label={`Photo ${i + 2}`}
           >
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
@@ -92,7 +93,7 @@ export default function Gallery({ images }: { images: string[] }) {
           {/* Main image */}
           <div
             className="w-full max-w-5xl h-[70vh] bg-contain bg-center bg-no-repeat mx-4"
-            style={{ backgroundImage: `url(${images[active]})` }}
+            style={{ backgroundImage: `url(${cldFull(images[active])})` }}
           />
 
           {/* Arrow buttons */}
@@ -120,7 +121,7 @@ export default function Gallery({ images }: { images: string[] }) {
                 className={`shrink-0 w-16 h-12 rounded bg-cover bg-center border-2 transition ${
                   i === active ? "border-peach" : "border-transparent opacity-60 hover:opacity-100"
                 }`}
-                style={{ backgroundImage: `url(${src})` }}
+                style={{ backgroundImage: `url(${cldThumb(src)})` }}
                 aria-label={`Photo ${i + 1}`}
               />
             ))}

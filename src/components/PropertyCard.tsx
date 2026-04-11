@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Property } from "@/lib/properties";
+import { cldThumb } from "@/lib/properties";
 
 export default function PropertyCard({ property }: { property: Property }) {
   const isPlaceholder = property.heroImage === "placeholder";
@@ -22,18 +23,18 @@ export default function PropertyCard({ property }: { property: Property }) {
           <div className="grid grid-cols-3 grid-rows-2 gap-0.5 h-full">
             <div
               className="col-span-2 row-span-2 bg-cover bg-center"
-              style={{ backgroundImage: `url(${photos[0]})` }}
+              style={{ backgroundImage: `url(${cldThumb(photos[0])})` }}
             />
             {photos[1] && (
               <div
                 className="bg-cover bg-center"
-                style={{ backgroundImage: `url(${photos[1]})` }}
+                style={{ backgroundImage: `url(${cldThumb(photos[1])})` }}
               />
             )}
             {photos[2] && (
               <div
                 className="bg-cover bg-center relative"
-                style={{ backgroundImage: `url(${photos[2]})` }}
+                style={{ backgroundImage: `url(${cldThumb(photos[2])})` }}
               >
                 {property.gallery.length > 3 && (
                   <span className="absolute bottom-2 right-2 bg-cream/90 text-deep text-xs font-medium px-2 py-1 rounded border border-deep/15">

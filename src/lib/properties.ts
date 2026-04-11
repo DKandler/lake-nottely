@@ -1,7 +1,14 @@
 const CLOUD = "dc6g4e3kf";
 const FOLDER = "lake-nottely-stays/chanterelle-shores";
+const BASE = `https://res.cloudinary.com/${CLOUD}/image/upload`;
 const cldUrl = (publicId: string) =>
-  `https://res.cloudinary.com/${CLOUD}/image/upload/w_1600,c_fill,q_auto,f_auto/${FOLDER}/${publicId}.jpg`;
+  `${BASE}/w_1200,c_fill,q_auto,f_auto/${FOLDER}/${publicId}.jpg`;
+
+// Higher quality for lightbox, smaller for thumbnails
+export const cldFull = (url: string) =>
+  url === "placeholder" ? url : url.replace("w_1200", "w_1800");
+export const cldThumb = (url: string) =>
+  url === "placeholder" ? url : url.replace("w_1200", "w_400,h_300");
 
 export type Property = {
   slug: string;
