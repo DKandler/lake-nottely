@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { cldFull, cldThumb } from "@/lib/properties";
+import Image from "next/image";
+import { cloudinaryLoader } from "@/lib/cloudinary";
 
 export default function Gallery({ images }: { images: string[] }) {
   const [active, setActive] = useState(0);
@@ -25,6 +26,16 @@ export default function Gallery({ images }: { images: string[] }) {
     return () => window.removeEventListener("keydown", handler);
   }, [prev, next]);
 
+  // Lock body scroll when lightbox is open
+  useEffect(() => {
+    if (lightbox) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [lightbox]);
+
   const isPlaceholder = images.length === 1 && images[0] === "placeholder";
 
   if (isPlaceholder) {
@@ -44,10 +55,18 @@ export default function Gallery({ images }: { images: string[] }) {
         {/* Main image */}
         <button
           onClick={() => { setActive(0); setLightbox(true); }}
-          className="sm:col-span-2 sm:row-span-2 bg-cover bg-center relative group"
-          style={{ backgroundImage: `url(${images[0]})` }}
+          className="sm:col-span-2 sm:row-span-2 relative group overflow-hidden"
           aria-label="View photos"
         >
+          <Image
+            loader={cloudinaryLoader}
+            src={images[0]}
+            alt="Property hero"
+            fill
+            sizes="(max-width: 640px) 100vw, 50vw"
+            className="object-cover"
+            priority
+          />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
         </button>
 
@@ -56,10 +75,17 @@ export default function Gallery({ images }: { images: string[] }) {
           <button
             key={src}
             onClick={() => { setActive(i + 1); setLightbox(true); }}
-            className="hidden sm:block bg-cover bg-center relative group"
-            style={{ backgroundImage: `url(${cldThumb(src)})` }}
+            className="hidden sm:block relative group overflow-hidden"
             aria-label={`Photo ${i + 2}`}
           >
+            <Image
+              loader={cloudinaryLoader}
+              src={src}
+              alt={`Property photo ${i + 2}`}
+              fill
+              sizes="25vw"
+              className="object-cover"
+            />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
           </button>
         ))}
@@ -91,10 +117,18 @@ export default function Gallery({ images }: { images: string[] }) {
           </div>
 
           {/* Main image */}
-          <div
-            className="w-full max-w-5xl h-[70vh] bg-contain bg-center bg-no-repeat mx-4"
-            style={{ backgroundImage: `url(${cldFull(images[active])})` }}
-          />
+          <div className="relative w-full max-w-5xl h-[70vh] mx-4">
+            <Image
+              loader={cloudinaryLoader}
+              src={images[active]}
+              alt={`Photo ${active + 1} of ${images.length}`}
+              fill
+              sizes="100vw"
+              quality={85}
+              className="object-contain"
+              priority
+            />
+          </div>
 
           {/* Arrow buttons */}
           <button
@@ -118,12 +152,20 @@ export default function Gallery({ images }: { images: string[] }) {
               <button
                 key={src}
                 onClick={() => setActive(i)}
-                className={`shrink-0 w-16 h-12 rounded bg-cover bg-center border-2 transition ${
+                className={`shrink-0 w-16 h-12 rounded relative overflow-hidden border-2 transition ${
                   i === active ? "border-peach" : "border-transparent opacity-60 hover:opacity-100"
                 }`}
-                style={{ backgroundImage: `url(${cldThumb(src)})` }}
                 aria-label={`Photo ${i + 1}`}
-              />
+              >
+                <Image
+                  loader={cloudinaryLoader}
+                  src={src}
+                  alt=""
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                />
+              </button>
             ))}
           </div>
         </div>

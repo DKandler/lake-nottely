@@ -1,12 +1,13 @@
 import BookingForm from "./BookingForm";
 import { properties } from "@/lib/properties";
 
-export default function BookPage({
+export default async function BookPage({
   searchParams,
 }: {
-  searchParams: { property?: string; start?: string; end?: string };
+  searchParams: Promise<{ property?: string; start?: string; end?: string }>;
 }) {
-  const slug = searchParams.property ?? properties[0].slug;
+  const sp = await searchParams;
+  const slug = sp.property ?? properties[0].slug;
   const property =
     properties.find((p) => p.slug === slug) ?? properties[0];
 
@@ -26,8 +27,8 @@ export default function BookPage({
       <div className="mt-8">
         <BookingForm
           property={property}
-          defaultStart={searchParams.start ?? ""}
-          defaultEnd={searchParams.end ?? ""}
+          defaultStart={sp.start ?? ""}
+          defaultEnd={sp.end ?? ""}
         />
       </div>
     </div>

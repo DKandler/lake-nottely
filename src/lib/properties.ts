@@ -1,14 +1,10 @@
-const CLOUD = "dc6g4e3kf";
-const FOLDER = "lake-nottely-stays/chanterelle-shores";
-const BASE = `https://res.cloudinary.com/${CLOUD}/image/upload`;
-const cldUrl = (publicId: string) =>
-  `${BASE}/w_1200,c_fill,q_auto,f_auto/${FOLDER}/${publicId}.jpg`;
-
-// Higher quality for lightbox, smaller for thumbnails
-export const cldFull = (url: string) =>
-  url === "placeholder" ? url : url.replace("w_1200", "w_1800");
-export const cldThumb = (url: string) =>
-  url === "placeholder" ? url : url.replace("w_1200", "w_400,h_300");
+/**
+ * Property data — single source of truth.
+ *
+ * Images are stored as Cloudinary public IDs (e.g. "photo-02").
+ * The Cloudinary loader in lib/cloudinary.ts builds responsive URLs at render time.
+ * Use "placeholder" for properties that don't have photos yet.
+ */
 
 export type Property = {
   slug: string;
@@ -20,7 +16,9 @@ export type Property = {
   sleeps: number;
   nightlyRate: number;
   cleaningFee: number;
+  /** Cloudinary public ID, or "placeholder" */
   heroImage: string;
+  /** Array of Cloudinary public IDs, or ["placeholder"] */
   gallery: string[];
   amenities: string[];
   included: string[];
@@ -79,25 +77,17 @@ export const properties: Property[] = [
     sleeps: 12,
     nightlyRate: 575,
     cleaningFee: 300,
-    heroImage: cldUrl("photo-02"),
+    heroImage: "photo-02",
     gallery: [
-      cldUrl("photo-02"), cldUrl("photo-03"), cldUrl("photo-05"),
-      cldUrl("photo-06"), cldUrl("photo-07"), cldUrl("photo-08"),
-      cldUrl("photo-09"), cldUrl("photo-10"), cldUrl("photo-13"),
-      cldUrl("photo-14"), cldUrl("photo-15"), cldUrl("photo-16"),
-      cldUrl("photo-17"), cldUrl("photo-18"), cldUrl("photo-19"),
-      cldUrl("photo-20"), cldUrl("photo-21"), cldUrl("photo-22"),
-      cldUrl("photo-23"), cldUrl("photo-24"), cldUrl("photo-25"),
-      cldUrl("photo-26"), cldUrl("photo-27"), cldUrl("photo-28"),
-      cldUrl("photo-29"), cldUrl("photo-30"), cldUrl("photo-31"),
-      cldUrl("photo-32"), cldUrl("photo-33"), cldUrl("photo-34"),
-      cldUrl("photo-35"), cldUrl("photo-36"), cldUrl("photo-37"),
-      cldUrl("photo-38"), cldUrl("photo-39"), cldUrl("photo-40"),
-      cldUrl("photo-41"), cldUrl("photo-42"), cldUrl("photo-43"),
-      cldUrl("photo-44"), cldUrl("photo-45"), cldUrl("photo-46"),
-      cldUrl("photo-47"), cldUrl("photo-48"), cldUrl("photo-49"),
-      cldUrl("photo-52"), cldUrl("photo-63"), cldUrl("photo-64"),
-      cldUrl("photo-72"), cldUrl("photo-73"), cldUrl("photo-74"),
+      "photo-02", "photo-03", "photo-05", "photo-06", "photo-07", "photo-08",
+      "photo-09", "photo-10", "photo-13", "photo-14", "photo-15", "photo-16",
+      "photo-17", "photo-18", "photo-19", "photo-20", "photo-21", "photo-22",
+      "photo-23", "photo-24", "photo-25", "photo-26", "photo-27", "photo-28",
+      "photo-29", "photo-30", "photo-31", "photo-32", "photo-33", "photo-34",
+      "photo-35", "photo-36", "photo-37", "photo-38", "photo-39", "photo-40",
+      "photo-41", "photo-42", "photo-43", "photo-44", "photo-45", "photo-46",
+      "photo-47", "photo-48", "photo-49", "photo-52", "photo-63", "photo-64",
+      "photo-72", "photo-73", "photo-74",
     ],
     amenities: [
       "100+ ft private waterfront",

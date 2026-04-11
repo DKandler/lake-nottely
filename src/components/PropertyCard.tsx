@@ -1,10 +1,12 @@
+"use client";
 import Link from "next/link";
+import Image from "next/image";
 import type { Property } from "@/lib/properties";
-import { cldThumb } from "@/lib/properties";
+import { cloudinaryLoader } from "@/lib/cloudinary";
 
 export default function PropertyCard({ property }: { property: Property }) {
   const isPlaceholder = property.heroImage === "placeholder";
-  const photos = property.gallery.slice(0, 5);
+  const photos = property.gallery.slice(0, 3);
 
   return (
     <div className="bg-cream border border-sage/30 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition">
@@ -21,23 +23,40 @@ export default function PropertyCard({ property }: { property: Property }) {
           </div>
         ) : (
           <div className="grid grid-cols-3 grid-rows-2 gap-0.5 h-full">
-            <div
-              className="col-span-2 row-span-2 bg-cover bg-center"
-              style={{ backgroundImage: `url(${cldThumb(photos[0])})` }}
-            />
-            {photos[1] && (
-              <div
-                className="bg-cover bg-center"
-                style={{ backgroundImage: `url(${cldThumb(photos[1])})` }}
+            <div className="col-span-2 row-span-2 relative overflow-hidden">
+              <Image
+                loader={cloudinaryLoader}
+                src={photos[0]}
+                alt={property.name}
+                fill
+                sizes="(max-width: 768px) 66vw, 33vw"
+                className="object-cover"
               />
+            </div>
+            {photos[1] && (
+              <div className="relative overflow-hidden">
+                <Image
+                  loader={cloudinaryLoader}
+                  src={photos[1]}
+                  alt={`${property.name} photo 2`}
+                  fill
+                  sizes="(max-width: 768px) 33vw, 16vw"
+                  className="object-cover"
+                />
+              </div>
             )}
             {photos[2] && (
-              <div
-                className="bg-cover bg-center relative"
-                style={{ backgroundImage: `url(${cldThumb(photos[2])})` }}
-              >
+              <div className="relative overflow-hidden">
+                <Image
+                  loader={cloudinaryLoader}
+                  src={photos[2]}
+                  alt={`${property.name} photo 3`}
+                  fill
+                  sizes="(max-width: 768px) 33vw, 16vw"
+                  className="object-cover"
+                />
                 {property.gallery.length > 3 && (
-                  <span className="absolute bottom-2 right-2 bg-cream/90 text-deep text-xs font-medium px-2 py-1 rounded border border-deep/15">
+                  <span className="absolute bottom-2 right-2 bg-cream/90 text-deep text-xs font-medium px-2 py-1 rounded border border-deep/15 z-10">
                     +{property.gallery.length - 3} more
                   </span>
                 )}

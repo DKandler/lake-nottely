@@ -33,9 +33,41 @@ export default function BookingForm({
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  /** Validate dates before submit */
+  const validateDates = (): string | null => {
+    if (!form.start || !form.end) return "Please select check-in and check-out dates.";
+
+    const start = new Date(form.start + "T00:00:00");
+    const end = new Date(form.end + "T00:00:00");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (start < today) return "Check-in date can't be in the past.";
+    if (end <= start) return "Check-out must be after check-in.";
+
+    // Check for blocked dates in the range
+    const d = new Date(start);
+    while (d <= end) {
+      const iso = d.toISOString().slice(0, 10);
+      if (property.blockedDates.includes(iso)) {
+        return `${iso} is unavailable. Please choose different dates.`;
+      }
+      d.setDate(d.getDate() + 1);
+    }
+
+    return null;
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    const dateError = validateDates();
+    if (dateError) {
+      setError(dateError);
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -107,6 +139,9 @@ export default function BookingForm({
     );
   }
 
+  const inputClasses =
+    "w-full px-3 py-2.5 border border-sage/50 rounded-md bg-white text-deep text-[0.95rem] font-[inherit] focus:outline-none focus:border-ridge focus:ring-[3px] focus:ring-ridge/15";
+
   return (
     <form
       onSubmit={onSubmit}
@@ -117,7 +152,7 @@ export default function BookingForm({
           required
           value={form.name}
           onChange={update("name")}
-          className="input"
+          className={inputClasses}
         />
       </Field>
       <div className="grid sm:grid-cols-2 gap-4">
@@ -127,7 +162,7 @@ export default function BookingForm({
             type="email"
             value={form.email}
             onChange={update("email")}
-            className="input"
+            className={inputClasses}
           />
         </Field>
         <Field label="Phone">
@@ -136,7 +171,7 @@ export default function BookingForm({
             type="tel"
             value={form.phone}
             onChange={update("phone")}
-            className="input"
+            className={inputClasses}
           />
         </Field>
       </div>
@@ -145,7 +180,7 @@ export default function BookingForm({
         <input
           value={property.name}
           readOnly
-          className="input bg-cream/50 cursor-not-allowed"
+          className={`${inputClasses} bg-cream/50 cursor-not-allowed`}
         />
       </Field>
 
@@ -156,7 +191,7 @@ export default function BookingForm({
             type="date"
             value={form.start}
             onChange={update("start")}
-            className="input"
+            className={inputClasses}
           />
         </Field>
         <Field label="Check-out">
@@ -165,7 +200,7 @@ export default function BookingForm({
             type="date"
             value={form.end}
             onChange={update("end")}
-            className="input"
+            className={inputClasses}
           />
         </Field>
       </div>
@@ -176,7 +211,7 @@ export default function BookingForm({
           value={form.message}
           onChange={update("message")}
           placeholder="Anything we should know? Number of guests, dogs, arrival time..."
-          className="input resize-none"
+          className={`${inputClasses} resize-none`}
         />
       </Field>
 
@@ -192,24 +227,6 @@ export default function BookingForm({
       <p className="text-xs text-deep/60 text-center">
         We confirm within 2 hours. No fees, no account.
       </p>
-
-      <style jsx>{`
-        .input {
-          width: 100%;
-          padding: 0.625rem 0.875rem;
-          border: 1px solid rgba(124, 157, 150, 0.5);
-          border-radius: 6px;
-          background: #fff;
-          color: #2c3e52;
-          font-size: 0.95rem;
-          font-family: inherit;
-        }
-        .input:focus {
-          outline: none;
-          border-color: #5b7c99;
-          box-shadow: 0 0 0 3px rgba(91, 124, 153, 0.15);
-        }
-      `}</style>
     </form>
   );
 }
